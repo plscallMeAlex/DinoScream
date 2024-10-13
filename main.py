@@ -1,11 +1,4 @@
-from src.game import Game
+from src.DinoScream import DinoScream as DnS
 
-game = Game()
-game.init()
-
-game.run()
-
-
-
-
-
+dino = DnS()
+dino.run()
