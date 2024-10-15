@@ -2,8 +2,10 @@ import pygame
 from .Animation import Animation
 
 
-JUMP_STRENGTH = 15
+JUMP_STRENGTH = 17
 GRAVITY = 1
+JUMP_MOVE_FACTOR = 0.5
+MOVE_SPEED = 5
 
 
 class Dino(pygame.sprite.Sprite):
@@ -15,7 +17,7 @@ class Dino(pygame.sprite.Sprite):
         self.y_velocity = 0  # Vertical velocity
         self.is_jumping = False  # Flag to check if Dino is jumping
         self.animation_index = 0  # Frame index for animation
-        self.animation_speed = 0.3  # Controls frame switching speed
+        self.animation_speed = 0.2  # Controls frame switching speed
         self.frame_counter = 0  # Tracks time between frame changes
 
         # Creating an animation instance for the dino
@@ -90,3 +92,26 @@ class Dino(pygame.sprite.Sprite):
     def die(self):
         """Triggers the dead animation."""
         self.set_animation("dead")
+
+    # temporary key_pressed parameter
+    def tilt_move(self, screen_width, key_pressed, tilt_angle=0):
+        """
+        Moves the Dino forward or backward based on the tilt angle.
+        Positive tilt_angle indicates forward movement, negative indicates backward.
+        """
+
+        # Determine the movement speed based on whether the Dino is jumping
+        move_speed = MOVE_SPEED * (JUMP_MOVE_FACTOR if self.is_jumping else 1)
+
+        if tilt_angle > 10 or key_pressed == "right":  # Threshold for forward tilt
+            self.rect.x += move_speed
+        elif tilt_angle < -10 or key_pressed == "left":  # Threshold for backward tilt
+            self.rect.x -= move_speed
+
+        # Prevent the Dino from moving out of bounds
+        if self.rect.x < 0:
+            self.rect.x = 0
+        elif (
+            self.rect.x > screen_width - self.rect.width
+        ):  # Assuming screen width is 800
+            self.rect.x = screen_width - self.rect.width
