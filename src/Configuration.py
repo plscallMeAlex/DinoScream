@@ -15,7 +15,7 @@ class Setting:
         if self.fullscreen:
             return (0, 0), pygame.FULLSCREEN
         else:
-            return (self.screen_width, self.screen_height), pygame.RESIZABLE
+            return (self.screen_width, self.screen_height), 0
 
     def setFullscreen(self, fullscreen: bool) -> None:
         self.fullscreen = fullscreen
