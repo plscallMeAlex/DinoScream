@@ -38,7 +38,11 @@ class Dino(pygame.sprite.Sprite):
 
         # Update the size of the rect based on the new animation frame
         if self.dino_current_animation:
+
+            current_bottom_center = self.rect.midbottom
             self.rect.size = self.dino_current_animation[0].get_size()
+
+            self.rect.midbottom = current_bottom_center
         self.image = self.dino_current_animation[self.animation_index]
 
     def update(self):
