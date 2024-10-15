@@ -1,11 +1,13 @@
 from .Game import Game, pygame
 from .Dino import Dino
+from .Tile import Tile
 
 
 class DinoScream(Game):
     def __init__(self):
         super().__init__()
         self.__dino = Dino()
+        self.__tile = Tile(self.__dino.rect)
         self.init()
 
     def init(self):
@@ -16,7 +18,6 @@ class DinoScream(Game):
         clock = pygame.time.Clock()
         key_pressed = None
         while self._running:
-            self.__dino.update()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._running = False
@@ -42,16 +43,17 @@ class DinoScream(Game):
                     ):  # Reset key pressed
                         key_pressed = None
 
-            # for gyro
-            tilt_angle = 0
-            self.__dino.tilt_move(
-                screen_width=self._screen.get_width(),
-                key_pressed=key_pressed,
-                tilt_angle=tilt_angle,
-            )
+            # update game state
+            """
+            param: key_pressed: temporary param it will be removed after adding gyro
+            param: tilt_angle: angle of the gyro make sure the direction of tilting
+            """
+            self.__dino.update(self._screen.get_width(), key_pressed, 0)
 
-            self._screen.fill((255, 255, 255))
-            self._screen.blit(self.__dino.image, self.__dino.rect)
+            # draw state
+            self._screen.fill((255, 255, 255))  # filling the background to white
+            self.__dino.draw(self._screen)
+            self.__tile.draw(self._screen)
 
             # pygame.draw.rect(self._screen, (0, 255, 0), self.__dino.rect, 2)
             # pygame.draw.circle(self._screen, (255, 0, 0), self.__dino.rect.midbottom, 1)

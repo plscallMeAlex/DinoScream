@@ -4,7 +4,7 @@ from .Animation import Animation
 
 JUMP_STRENGTH = 17
 GRAVITY = 1
-JUMP_MOVE_FACTOR = 0.5
+JUMP_MOVE_FACTOR = 0.8
 MOVE_SPEED = 5
 
 
@@ -47,20 +47,14 @@ class Dino(pygame.sprite.Sprite):
             self.rect.midbottom = current_bottom_center
         self.image = self.dino_current_animation[self.animation_index]
 
-    def update(self):
+    def update(self, screen_width, key_pressed, tilt_angle):
         """Updates the animation and position of the Dino."""
         self.update_animation()  # Update the animation frames
+        self.tilt_move(screen_width, key_pressed, tilt_angle)
+        self.handle_jumping()
 
-        if self.is_jumping:  # Handle jumping mechanics
-            self.rect.y += self.y_velocity
-            self.y_velocity += GRAVITY  # Apply gravity
-
-            # Check if the Dino has landed on the ground
-            if self.rect.y >= 400:  # Assuming 100 is ground level
-                self.rect.y = 400
-                self.y_velocity = 0
-                self.is_jumping = False
-                self.set_animation("run")  # Switch back to running
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
     def update_animation(self):
         """Updates the animation frame based on frame speed."""
@@ -71,6 +65,18 @@ class Dino(pygame.sprite.Sprite):
                 self.dino_current_animation
             )
             self.image = self.dino_current_animation[self.animation_index]
+
+    def handle_jumping(self):
+        if self.is_jumping:  # Handle jumping mechanics
+            self.rect.y += self.y_velocity
+            self.y_velocity += GRAVITY  # Apply gravity
+
+            # Check if the Dino has landed on the ground
+            if self.rect.y >= 400:  # Assuming 100 is ground level
+                self.rect.y = 400
+                self.y_velocity = 0
+                self.is_jumping = False
+                self.set_animation("run")  # Switch back to running
 
     def jump(self):
         """Triggers the jump animation and movement."""
