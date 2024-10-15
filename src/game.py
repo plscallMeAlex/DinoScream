@@ -31,3 +31,6 @@ class Game:
 
     def set_setting(self, setting: Setting):
         self.__setting = setting
+
+    def get_screen(self):
+        return self._screen

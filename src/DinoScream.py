@@ -1,13 +1,15 @@
-from .Game import Game, pygame
+import pygame
 from .Dino import Dino
 from .Tile import Tile
-
+from .game import Game 
+from .obstacles import cactus
 
 class DinoScream(Game):
     def __init__(self):
         super().__init__()
         self.__dino = Dino()
         self.__tile = Tile(self.__dino.rect)
+        self.__cactus = cactus.Cactus(10)
         self.init()
 
     def init(self):
@@ -58,6 +60,8 @@ class DinoScream(Game):
             # pygame.draw.rect(self._screen, (0, 255, 0), self.__dino.rect, 2)
             # pygame.draw.circle(self._screen, (255, 0, 0), self.__dino.rect.midbottom, 1)
 
+            self._screen.blit(self.__cactus.image, self.__cactus.rect)
+            self.__cactus.update()
             pygame.display.update()
 
             clock.tick(60)
