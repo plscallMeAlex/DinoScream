@@ -31,3 +31,6 @@ class Tile:
         self.offset -= SCROLL_SPEED
         if self.offset <= -self.tile_width:
             self.offset = 0
+
+    def stop(self):
+        self.offset = 0
