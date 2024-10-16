@@ -1,7 +1,7 @@
 import pygame
-from src.Animation import Animation
-from src.Configuration import Setting
-
+from ..Animation import Animation
+from ..Configuration import Setting
+from ..game import Game
 
 class Cactus(pygame.sprite.Sprite):
     def __init__(self, size, speed=-5):
@@ -9,8 +9,11 @@ class Cactus(pygame.sprite.Sprite):
 
         # placeholder imgage
         self.image = pygame.image.load("resources/cactus.png")
-        self.rect = pygame.Rect(Setting.screen_height, 200, 20, size)
+        self.rect = pygame.Rect(Setting.screen_height, 400, size, 47)
         self.x_velocity = speed
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
 
     def update(self):
         self.rect.x += self.x_velocity
@@ -18,9 +21,10 @@ class Cactus(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.kill()
 
-    def draw(self, screen):
-        screen.blit(self.image, self.rect)
-
     def kill(self):
         super().kill()
         del self
+
+
+
+    
