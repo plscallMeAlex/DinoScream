@@ -110,9 +110,9 @@ class Dino(pygame.sprite.Sprite):
         move_speed = MOVE_SPEED * (JUMP_MOVE_FACTOR if self.is_jumping else 1)
 
         if tilt_angle >= 4 or key_pressed == "right":  # Threshold for forward tilt
-            self.rect.x += move_speed
-        elif tilt_angle <= -4 or key_pressed == "left":  # Threshold for backward tilt
             self.rect.x -= move_speed
+        elif tilt_angle <= -4 or key_pressed == "left":  # Threshold for backward tilt
+            self.rect.x += move_speed
 
         # Prevent the Dino from moving out of bounds
         if self.rect.x < 0:

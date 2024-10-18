@@ -2,7 +2,7 @@ import pygame
 from src.Game import Game
 from src.Dino import Dino
 from src.Tile import Tile
-from src.obstacles import Cactus
+from src.obstacles.Cactus import Cactus
 from src.modules.Mpu_6050_md import get_tilt_angle
 
 
