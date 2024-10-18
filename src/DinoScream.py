@@ -3,14 +3,14 @@ import random
 from .Dino import Dino
 from .Tile import Tile
 from .game import Game 
-from .obstacles.cactus import Cactus
+from .obstacles import cactus, bird
 
 class DinoScream(Game):
     def __init__(self):
         super().__init__()
         self.__dino = Dino()
         self.__tile = Tile(self.__dino.rect)
-        self.__cactusGrp = pygame.sprite.Group(Cactus(40))
+        self.obstacles = []
         self.init()
 
     def init(self):
@@ -20,6 +20,9 @@ class DinoScream(Game):
     def run(self):
         self.clock = pygame.time.Clock()
         key_pressed = None
+        last_obstacle_time = pygame.time.get_ticks()
+        obstacle_interval = 2000
+
         while self._running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -53,29 +56,47 @@ class DinoScream(Game):
             """
             self.__dino.update(self._screen.get_width(), key_pressed, 0)
             
-            self.__cactus = self.__cactusGrp.sprites()[0]
             # draw state
             self._screen.fill((255, 255, 255))  # filling the background to white
             self.__dino.draw(self._screen)
             self.__tile.draw(self._screen)
-            self.__cactus.draw(self._screen)
             # pygame.draw.rect(self._screen, (0, 255, 0), self.__dino.rect, 2)
             # pygame.draw.circle(self._screen, (255, 0, 0), self.__dino.rect.midbottom, 1)
-            self.random_obstacle()
-
-            self.__cactus.update()
-            self.check_collision() # check for collision every frame
+            
+            # check if enough time has passed before spawning a new obstacle
+            current_time = pygame.time.get_ticks()
+            if current_time - last_obstacle_time > obstacle_interval:
+                self.obstacles.append(self.random_obstacle())
+                last_obstacle_time = current_time
+        
+            for obs in self.obstacles[:]:
+                if obs is not None:
+                    updated = obs.update()
+                    if updated:
+                        self.obstacles.remove(obs)
+                    obs.draw(self._screen)
+                    self.check_collision(obs, self.__dino) # check for collision every frame
+                
             pygame.display.update()
 
             self.clock.tick(60)
     
-    def check_collision(self):
-        if pygame.sprite.collide_rect(self.__dino, self.__cactus):
+    def check_collision(self, object, dino):
+        if pygame.sprite.collide_rect(dino, object):
             self.__dino.die()
             # need to stop the game in some way
 
     def random_obstacle(self):
-        rand = random.randint(0, 200)
-        if rand <= 1:
-            self.__cactusGrp.add(Cactus(40))
-            print("cacti added")
+        rand = random.randint(0, 5)
+        if rand <= 2:
+            print("cactus spawned")
+            self.__cactus = cactus.Cactus(20)
+            self.__cactus.draw(self._screen)
+            return self.__cactus
+        elif rand == 0:
+            print("bird spawned")
+            self.__bird = bird.Bird()
+            self.__bird.draw(self._screen)
+            return self.__bird
+        else:
+            return None
