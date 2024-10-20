@@ -4,6 +4,7 @@ from src.Dino import Dino
 from src.Tile import Tile
 from src.obstacles.Cactus import Cactus
 from src.modules.Mpu_6050_md import get_tilt_angle
+from src.modules.KY_037_md import start_serial_reader, JUMP_EVENT, CROUCH_EVENT
 
 
 class DinoScream(Game):
@@ -20,11 +21,19 @@ class DinoScream(Game):
 
     def run(self):
         clock = pygame.time.Clock()
+        start_serial_reader()
         while self._running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self._running = False
 
+                # Handle jump and crouch events
+                elif event.type == JUMP_EVENT:
+                    self.__dino.jump()
+                elif event.type == CROUCH_EVENT:
+                    self.__dino.crouch()
+
+                # Manual control using keyboard
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:  # Space triggers jump
                         self.__dino.jump()

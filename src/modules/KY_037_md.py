@@ -1,22 +1,16 @@
 import platform
 import serial
-import json
 import time
-
+import threading
+import pygame
 
 # Handling the platform-specific serial port
-SERIAL_PORT = None
-if platform.system() == "Windows":
-    SERIAL_PORT = "COM5"
-else:
-    SERIAL_PORT = "/dev/ttyUSB0"
-
-# Baud rate for the serial communication
+SERIAL_PORT = "COM5" if platform.system() == "Windows" else "/dev/ttyUSB0"
 BAUD_RATE = 9600
 
-# noted:
-# it will wait the duration of the spike the sending end
-# during the spike the intesity will be sent continuously until the spike ends
+# Custom event types for jump and crouch
+JUMP_EVENT = pygame.USEREVENT + 1
+CROUCH_EVENT = pygame.USEREVENT + 2
 
 
 def read_serial():
@@ -27,22 +21,21 @@ def read_serial():
             line = ser.readline().decode("utf-8").strip()  # Read and decode the line
             if line:
                 try:
-                    # Parse JSON data
-                    data = json.loads(line)
-
-                    # Process the parsed data
-                    if "spikeStatus" in data:
-                        if data["spikeStatus"] == "start":
-                            print("Spike started.")
-                        elif data["spikeStatus"] == "end":
-                            print(f"Spike ended. Duration: {data['spikeDuration']} ms")
-
-                            # Check if spikeIntensity is available in the data
-                            if "spikeIntensity" in data:
-                                print(f"Spike Intensity: {data['spikeIntensity']:.2f}%")
-                        else:
-                            print("No spike detected.")
-
-                except json.JSONDecodeError as e:
-                    print(f"Error decoding JSON: {e}")
+                    # Parse the line as a float if it's a spike intensity
+                    spike_intensity = float(line)
+                    if spike_intensity > 10:
+                        # Trigger the jump event
+                        pygame.event.post(pygame.event.Event(JUMP_EVENT))
+                    else:
+                        # Trigger the crouch event
+                        pygame.event.post(pygame.event.Event(CROUCH_EVENT))
+                except ValueError:
+                    # If parsing fails, ignore the line
+                    pass
             time.sleep(0.1)
+
+
+# Reading the serial must be done in a separate thread to prevent blocking
+def start_serial_reader():
+    serial_thread = threading.Thread(target=read_serial, daemon=True)
+    serial_thread.start()
