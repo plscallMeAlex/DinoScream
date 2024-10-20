@@ -58,7 +58,11 @@ class DinoScream(Game):
             param: screen_width: width of the screen for range of movement
             param: tilt_angle: angle of the gyro make sure the direction of tilting
             """
-            self.__dino.update(self._screen.get_width(), tilt_angle=get_tilt_angle())
+            self.__dino.update(
+                self._screen.get_width(),
+                tilt_angle=get_tilt_angle(),
+                elapsed_time=pygame.time.get_ticks(),
+            )
             self.__cactus.update()
             pygame.display.update()
 

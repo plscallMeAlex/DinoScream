@@ -16,6 +16,8 @@ class Dino(pygame.sprite.Sprite):
         self.rect = pygame.Rect(100, 400, 44, 47)  # Initial position and size
         self.y_velocity = 0  # Vertical velocity
         self.is_jumping = False  # Flag to check if Dino is jumping
+        self.is_crouching = False  # Flag to check if Dino is crouching
+        self.crouching_time = 0  # Time spent crouching
         self.animation_index = 0  # Frame index for animation
         self.animation_speed = 0.2  # Controls frame switching speed
         self.frame_counter = 0  # Tracks time between frame changes
@@ -47,11 +49,14 @@ class Dino(pygame.sprite.Sprite):
             self.rect.midbottom = current_bottom_center
         self.image = self.dino_current_animation[self.animation_index]
 
-    def update(self, screen_width, tilt_angle):
+    def update(self, screen_width, tilt_angle, elapsed_time):
         """Updates the animation and position of the Dino."""
         self.update_animation()  # Update the animation frames
         self.tilt_move(screen_width, tilt_angle)
         self.handle_jumping()
+
+        if elapsed_time - self.crouching_time > 1000:
+            self.stand_up()
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -87,13 +92,16 @@ class Dino(pygame.sprite.Sprite):
 
     def crouch(self):
         """Triggers the crouching animation."""
-        if not self.is_jumping:
+        if not self.is_jumping and not self.is_crouching:
             self.set_animation("crouch")
+            self.is_crouching = True
+            self.crouching_time = pygame.time.get_ticks()
 
     def stand_up(self):
         """Switches back to the running animation from crouching."""
         if self.state == "crouch":
             self.set_animation("run")
+            self.is_crouching = False
 
     def die(self):
         """Triggers the dead animation."""
