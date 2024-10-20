@@ -5,7 +5,7 @@ import threading
 import pygame
 
 # Handling the platform-specific serial port
-SERIAL_PORT = "COM5" if platform.system() == "Windows" else "/dev/ttyUSB0"
+SERIAL_PORT = "COM5" if platform.system() == "Windows" else "/dev/ttyACM0"
 BAUD_RATE = 9600
 
 # Custom event types for jump and crouch
