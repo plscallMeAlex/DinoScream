@@ -4,7 +4,7 @@ from src.Dino import Dino
 from src.Tile import Tile
 from src.obstacles.Cactus import Cactus
 from src.modules.Mpu_6050_md import get_tilt_angle
-from src.modules.KY_037_md import start_serial_reader, JUMP_EVENT, CROUCH_EVENT
+from src.modules.KY_037_md import JUMP_EVENT, CROUCH_EVENT
 
 
 class Gameplay(GameState):
@@ -45,7 +45,6 @@ class Gameplay(GameState):
                 self.__dino.crouch()
 
     def run(self, delta_time, screen):
-        start_serial_reader()
         self.handle_event()
         self.render(screen)
         self.update(delta_time, screen)

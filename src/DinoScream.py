@@ -2,6 +2,7 @@ import pygame
 from src.gamescene.SceneManager import SceneManager
 from src.gamescene.Gameplay import Gameplay
 from src.gamescene.MainMenu import MainMenu
+from src.modules.KY_037_md import start_serial_reader
 from src.Configuration import Setting
 
 FPS = 60
@@ -19,6 +20,7 @@ class DinoScream:
 
     def run(self):
         clock = pygame.time.Clock()
+        start_serial_reader()
         while True:
             delta_time = clock.tick(FPS)
 
