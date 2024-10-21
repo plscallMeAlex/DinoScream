@@ -1,7 +1,6 @@
 import pygame
 from src.Animation import Animation
 from src.Configuration import Setting
-from src.Game import Game
 
 
 class Cactus(pygame.sprite.Sprite):
