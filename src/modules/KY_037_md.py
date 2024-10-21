@@ -23,7 +23,7 @@ def read_serial():
                 try:
                     # Parse the line as a float if it's a spike intensity
                     spike_intensity = float(line)
-                    if spike_intensity > 10:
+                    if spike_intensity > 8:
                         # Trigger the jump event
                         pygame.event.post(pygame.event.Event(JUMP_EVENT))
                     else:

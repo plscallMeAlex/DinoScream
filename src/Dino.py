@@ -101,6 +101,7 @@ class Dino(pygame.sprite.Sprite):
         """Switches back to the running animation from crouching."""
         if self.state == "crouch":
             self.set_animation("run")
+            self.state = "run"
             self.is_crouching = False
 
     def die(self):
