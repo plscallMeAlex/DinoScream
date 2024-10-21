@@ -24,11 +24,12 @@ class DinoScream:
         while True:
             delta_time = clock.tick(FPS)
 
+            events = pygame.event.get()
             # handle quiting the game event.
-            for event in pygame.event.get():
+            for event in events:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
 
-            self.__sceneManager.run(delta_time, self.__screen)
+            self.__sceneManager.run(delta_time, self.__screen, events)
             pygame.display.update()

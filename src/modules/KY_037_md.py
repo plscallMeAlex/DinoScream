@@ -12,23 +12,31 @@ BAUD_RATE = 9600
 JUMP_EVENT = pygame.USEREVENT + 1
 CROUCH_EVENT = pygame.USEREVENT + 2
 
+# Cooldown
+COOLDOWN = 1
 
 def read_serial():
     with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
-        time.sleep(2)  # Wait for the serial connection to establish
+        time.sleep(1)  # Wait for the serial connection to establish
         print("Connected to the serial port")
+        last_action_time = 0
         while True:
             line = ser.readline().decode("utf-8").strip()  # Read and decode the line
             if line:
                 try:
                     # Parse the line as a float if it's a spike intensity
                     spike_intensity = float(line)
-                    if spike_intensity > 8:
-                        # Trigger the jump event
-                        pygame.event.post(pygame.event.Event(JUMP_EVENT))
-                    else:
-                        # Trigger the crouch event
-                        pygame.event.post(pygame.event.Event(CROUCH_EVENT))
+                    print("Intesity: ",spike_intensity)
+                    current_time = time.time()
+                    if current_time - last_action_time >= COOLDOWN:
+                        if spike_intensity > 9:
+                            # Trigger the jump event
+                            pygame.event.post(pygame.event.Event(JUMP_EVENT))
+                            last_action_time = current_time
+                        elif spike_intensity <= 9:
+                            # Trigger the crouch event
+                            pygame.event.post(pygame.event.Event(CROUCH_EVENT))
+                            last_action_time = current_time
                 except ValueError:
                     # If parsing fails, ignore the line
                     pass

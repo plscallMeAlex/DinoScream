@@ -33,8 +33,8 @@ class Gameplay(GameState):
         self.__tile.draw(screen)
         self.__cactus.draw(screen)
 
-    def handle_event(self):
-        for event in pygame.event.get():
+    def handle_event(self, events):
+        for event in events:
             if event.type == pygame.QUIT:
                 self._running = False
 
@@ -44,8 +44,8 @@ class Gameplay(GameState):
             elif event.type == CROUCH_EVENT:
                 self.__dino.crouch()
 
-    def run(self, delta_time, screen):
-        self.handle_event()
+    def run(self, delta_time, screen, events):
+        self.handle_event(events)
         self.render(screen)
         self.update(delta_time, screen)
 
