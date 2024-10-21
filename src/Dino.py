@@ -109,7 +109,7 @@ class Dino(pygame.sprite.Sprite):
         self.set_animation("dead")
 
     # temporary key_pressed parameter
-    def tilt_move(self, screen_width, tilt_angle, key_pressed="None"):
+    def tilt_move(self, screen_width, tilt_angle):
         """
         Moves the Dino forward or backward based on the tilt angle.
         Positive tilt_angle indicates forward movement, negative indicates backward.
@@ -118,9 +118,9 @@ class Dino(pygame.sprite.Sprite):
         # Determine the movement speed based on whether the Dino is jumping
         move_speed = MOVE_SPEED * (JUMP_MOVE_FACTOR if self.is_jumping else 1)
 
-        if tilt_angle >= 4 or key_pressed == "right":  # Threshold for forward tilt
+        if tilt_angle >= 4:  # Threshold for forward tilt
             self.rect.x -= move_speed
-        elif tilt_angle <= -4 or key_pressed == "left":  # Threshold for backward tilt
+        elif tilt_angle <= -4:  # Threshold for backward tilt
             self.rect.x += move_speed
 
         # Prevent the Dino from moving out of bounds
