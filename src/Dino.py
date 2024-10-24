@@ -30,11 +30,14 @@ class Dino(pygame.sprite.Sprite):
             "dead": Animation((1024, 2), 44, 47, 1),
         }
 
-        self.state = "run"  # Start with running animation
-        self.set_animation(self.state)
+        self.state = None  # Start with running animation
+        self.set_animation("run")
 
     def set_animation(self, state):
         """Sets the current animation based on the state."""
+        if self.state == state:
+            return
+        
         self.state = state
         # Get the list of frames for the current animation
         self.dino_current_animation = self.dino_animations[state].getAnimationFrames()
@@ -54,9 +57,7 @@ class Dino(pygame.sprite.Sprite):
         self.update_animation()  # Update the animation frames
         self.tilt_move(screen_width, tilt_angle)
         self.handle_jumping()
-
-        if elapsed_time - self.crouching_time > 1000:
-            self.stand_up()
+        self.handle_crouch()
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -80,15 +81,22 @@ class Dino(pygame.sprite.Sprite):
             if self.rect.y >= 400:  # Assuming 100 is ground level
                 self.rect.y = 400
                 self.y_velocity = 0
-                self.is_jumping = False
                 self.set_animation("run")  # Switch back to running
+                self.is_jumping = False
+                self.state = "run"
 
     def jump(self):
         """Triggers the jump animation and movement."""
-        if not self.is_jumping:
+        if not self.is_jumping and not self.is_crouching:
             self.is_jumping = True
             self.y_velocity = -JUMP_STRENGTH
             self.set_animation("jump")
+
+    def handle_crouch(self):
+        if self.is_crouching:
+            current_time = pygame.time.get_ticks()
+            if current_time - self.crouching_time >= 800:
+                self.stand_up()
 
     def crouch(self):
         """Triggers the crouching animation."""
@@ -101,7 +109,6 @@ class Dino(pygame.sprite.Sprite):
         """Switches back to the running animation from crouching."""
         if self.state == "crouch":
             self.set_animation("run")
-            self.state = "run"
             self.is_crouching = False
 
     def die(self):
@@ -109,7 +116,7 @@ class Dino(pygame.sprite.Sprite):
         self.set_animation("dead")
 
     # temporary key_pressed parameter
-    def tilt_move(self, screen_width, tilt_angle, key_pressed="None"):
+    def tilt_move(self, screen_width, tilt_angle):
         """
         Moves the Dino forward or backward based on the tilt angle.
         Positive tilt_angle indicates forward movement, negative indicates backward.
@@ -118,9 +125,9 @@ class Dino(pygame.sprite.Sprite):
         # Determine the movement speed based on whether the Dino is jumping
         move_speed = MOVE_SPEED * (JUMP_MOVE_FACTOR if self.is_jumping else 1)
 
-        if tilt_angle >= 4 or key_pressed == "right":  # Threshold for forward tilt
+        if tilt_angle >= 4:  # Threshold for forward tilt
             self.rect.x -= move_speed
-        elif tilt_angle <= -4 or key_pressed == "left":  # Threshold for backward tilt
+        elif tilt_angle <= -4:  # Threshold for backward tilt
             self.rect.x += move_speed
 
         # Prevent the Dino from moving out of bounds
