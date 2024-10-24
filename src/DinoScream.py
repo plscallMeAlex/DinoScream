@@ -1,7 +1,5 @@
 import pygame
 from src.gamescene.SceneManager import SceneManager
-from src.gamescene.Gameplay import Gameplay
-from src.gamescene.MainMenu import MainMenu
 from src.modules.KY_037_md import start_serial_reader
 from src.Configuration import Setting
 
@@ -12,11 +10,7 @@ class DinoScream:
     def __init__(self):
         self.__setting = Setting()
         self.__screen = pygame.display.set_mode(*self.__setting.getVideoMode())
-        self.__scene = {
-            "gameplay": Gameplay(),
-            # "main_menu": MainMenu(),
-        }
-        self.__sceneManager = SceneManager(self.__scene["gameplay"])
+        self.__sceneManager = SceneManager("gameplay")
 
     def run(self):
         clock = pygame.time.Clock()

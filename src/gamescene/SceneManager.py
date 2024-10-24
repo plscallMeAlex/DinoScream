@@ -1,10 +1,14 @@
-class SceneManager:
+from src.gamescene.Gameplay import Gameplay
+from src.gamescene.MainMenu import MainMenu
 
-    def __init__(self, current_scene):
-        self.current_scene = current_scene
+
+class SceneManager:
+    def __init__(self, initial_scene):
+        self.__scene = {"gameplay": Gameplay(self), "main_menu": MainMenu(self)}
+        self.current_scene = self.__scene[initial_scene]
 
     def change_scene(self, new_scene):
-        self.current_scen = new_scene
+        self.current_scene = new_scene
         return self.current_scene
 
     def get_current_scene(self):

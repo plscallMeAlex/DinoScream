@@ -8,7 +8,9 @@ from src.modules.KY_037_md import JUMP_EVENT, CROUCH_EVENT
 
 
 class Gameplay(GameState):
-    def __init__(self):
+    def __init__(self, screenManager):
+        self._screenManager = screenManager
+
         self.__dino = Dino()
         self.__tile = Tile(self.__dino.rect)
         self.__cactus = Cactus(10)
