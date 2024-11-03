@@ -20,6 +20,9 @@ class Gameplay(GameState):
         self.__obstacles_last_spawn = 0
         self.__game_over = False
 
+        # random spawn obstacles speed (if the value is greater, the obstacles will spawn less)
+        self.__obstacles_spawn_speed = 1000
+
         # Score
         self.__score = 0
         self.__scorePS = 0
@@ -39,7 +42,7 @@ class Gameplay(GameState):
 
         # Randomly spawn obstacles
         self.__obstacles_last_spawn += delta_time
-        if self.__obstacles_last_spawn >= 2000:
+        if self.__obstacles_last_spawn >= self.__obstacles_spawn_speed:
             self.random_obstacle()
             self.__obstacles_last_spawn = 0
 
@@ -65,6 +68,21 @@ class Gameplay(GameState):
             self.__score += 1
             self.__scorePS = 0
         self.__scorePS += delta_time
+
+        # Score mechanism increase game difficulty
+        match self.__score:
+            case 100:
+                self.__obstacles_spawn_speed = 1800
+            case 300:
+                self.__obstacles_spawn_speed = 1600
+            case 500:
+                self.__obstacles_spawn_speed = 1200
+            case 700:
+                self.__obstacles_spawn_speed = 1000
+            case 1000:
+                self.__obstacles_spawn_speed = 800
+            case 1500:
+                self.__obstacles_spawn_speed = 600
 
         # Check if the score is reach 99,999 will end the game
         if self.__score >= 99999:
