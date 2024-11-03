@@ -20,9 +20,14 @@ class Gameplay(GameState):
         self.__obstacles_last_spawn = 0
         self.__game_over = False
 
+        # Score
+        self.__score = 0
+        self.__scorePS = 0
+
         # Font for the "GAME OVER" text
         pygame.font.init()
         self.font = pygame.font.Font(None, 74)
+        self.score_font = pygame.font.Font(None, 36)
 
         pygame.display.set_caption("DinoScream")
 
@@ -55,6 +60,16 @@ class Gameplay(GameState):
             if obj.check_collision(self.__dino.rect):
                 self.__game_over = True
 
+        # Score increment mechanism
+        if self.__scorePS >= 90:
+            self.__score += 1
+            self.__scorePS = 0
+        self.__scorePS += delta_time
+
+        # Check if the score is reach 99,999 will end the game
+        if self.__score >= 99999:
+            self.__game_over = True
+
     def render(self, screen):
         screen.fill((255, 255, 255))  # filling the background to white
         self.__dino.draw(screen)
@@ -73,6 +88,9 @@ class Gameplay(GameState):
                 center=(screen.get_width() // 2, screen.get_height() // 2)
             )
             screen.blit(game_over_text, text_rect)
+
+        score_text = self.score_font.render(f"Score: {self.__score}", True, (0, 0, 0))
+        screen.blit(score_text, (screen.get_width() - score_text.get_width() - 10, 10))
 
     def handle_event(self, events):
 
@@ -115,6 +133,7 @@ class Gameplay(GameState):
         self.__obstacles = []
         self.__obstacles_last_spawn = 0
         self.__game_over = False
+        self.__score = 0
 
     def run(self, delta_time, screen, events):
         self.handle_event(events)
