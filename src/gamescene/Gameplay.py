@@ -62,15 +62,15 @@ class Gameplay(GameState):
                 self.__dino.crouch()
 
     def random_obstacle(self):
-        rand = random.randint(0, 5)
-        if rand <= 2:
-            print("Cactus Spawn")
-            cactus = Cactus(20)
-            self.__obstacles.append(cactus)
-        else:
+        rand = random.randint(0, 100)
+        if rand <= 20:
             print("Bird Spawn")
             bird = Bird()
             self.__obstacles.append(bird)
+        else:
+            print("Cactus Spawn")
+            cactus = Cactus()
+            self.__obstacles.append(cactus)
 
     def run(self, delta_time, screen, events):
         self.handle_event(events)

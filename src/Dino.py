@@ -37,7 +37,7 @@ class Dino(pygame.sprite.Sprite):
         """Sets the current animation based on the state."""
         if self.state == state:
             return
-        
+
         self.state = state
         # Get the list of frames for the current animation
         self.dino_current_animation = self.dino_animations[state].getAnimationFrames()
@@ -137,3 +137,8 @@ class Dino(pygame.sprite.Sprite):
             self.rect.x > screen_width - self.rect.width
         ):  # Assuming screen width is 800
             self.rect.x = screen_width - self.rect.width
+
+    def check_collision(self, obs):
+        if self.rect.colliderect(obs.rect):
+            return True
+        return False
