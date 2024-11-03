@@ -114,6 +114,7 @@ class Dino(pygame.sprite.Sprite):
     def die(self):
         """Triggers the dead animation."""
         self.set_animation("dead")
+        self.state = "dead"
 
     # temporary key_pressed parameter
     def tilt_move(self, screen_width, tilt_angle):
@@ -137,8 +138,3 @@ class Dino(pygame.sprite.Sprite):
             self.rect.x > screen_width - self.rect.width
         ):  # Assuming screen width is 800
             self.rect.x = screen_width - self.rect.width
-
-    def check_collision(self, obs):
-        if self.rect.colliderect(obs.rect):
-            return True
-        return False

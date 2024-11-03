@@ -48,3 +48,6 @@ class Cactus(pygame.sprite.Sprite):
         if self.rect.right < -20:
             return True
         return False
+
+    def check_collision(self, dino_rect):
+        return self.rect.colliderect(dino_rect)

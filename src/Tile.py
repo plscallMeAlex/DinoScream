@@ -22,13 +22,13 @@ class Tile:
 
         self.offset = 0  # Scrolling offset
 
-    def draw(self, screen):
+    def draw(self, screen, speed=SCROLL_SPEED):
         """Draws the tiles on the screen with a looping effect."""
         y_pos = self.under_dino - GAP_DINO
         screen.blit(IMAGE, (self.offset, y_pos), self.tile_rect)
         screen.blit(IMAGE, (self.offset + self.tile_width, y_pos), self.tile_rect)
 
-        self.offset -= SCROLL_SPEED
+        self.offset -= speed
         if self.offset <= -self.tile_width:
             self.offset = 0
 

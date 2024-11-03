@@ -23,7 +23,6 @@ class Bird(pygame.sprite.Sprite):
         self.rect.x += self.x_velocity
         if self.check_out_of_screen():
             self.kill()
-
         self.update_animation()
 
     def update_animation(self):
@@ -44,3 +43,6 @@ class Bird(pygame.sprite.Sprite):
         if self.rect.right < -20:
             return True
         return False
+
+    def check_collision(self, dino_rect):
+        return self.rect.colliderect(dino_rect)
