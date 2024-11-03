@@ -95,7 +95,7 @@ class Dino(pygame.sprite.Sprite):
     def handle_crouch(self):
         if self.is_crouching:
             current_time = pygame.time.get_ticks()
-            if current_time - self.crouching_time >= 800:
+            if current_time - self.crouching_time >= 600:
                 self.stand_up()
 
     def crouch(self):

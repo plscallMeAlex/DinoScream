@@ -8,7 +8,7 @@ class Bird(pygame.sprite.Sprite):
         super().__init__()
 
         self.rect = pygame.Rect(
-            Setting.screen_width, Setting.screen_height // 2 + 80, 46, 40
+            Setting.screen_width, Setting.screen_height // 2 + 75, 46, 40
         )
         self.x_velocity = speed
         self.animation_index = 0

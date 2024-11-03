@@ -1,5 +1,6 @@
 import pygame
 import random
+import platform
 from src.gamescene.GameState import GameState
 from src.Dino import Dino
 from src.Tile import Tile, SCROLL_SPEED
@@ -79,10 +80,18 @@ class Gameplay(GameState):
             if event.type == pygame.QUIT:
                 self._running = False
 
-            # Handle jump and crouch events
-            elif event.type == JUMP_EVENT:
+            # Handle jump and crouch events separate platform controls
+            elif event.type == JUMP_EVENT or (
+                platform.system() == "Windows"
+                and event.type == pygame.KEYDOWN
+                and event.key == pygame.K_UP
+            ):
                 self.__dino.jump()
-            elif event.type == CROUCH_EVENT:
+            elif event.type == CROUCH_EVENT or (
+                platform.system() == "Windows"
+                and event.type == pygame.KEYDOWN
+                and event.key == pygame.K_DOWN
+            ):
                 self.__dino.crouch()
 
             elif event.type == pygame.KEYDOWN:
@@ -93,11 +102,9 @@ class Gameplay(GameState):
     def random_obstacle(self):
         rand = random.randint(0, 100)
         if rand <= 20:
-            print("Bird Spawn")
             bird = Bird()
             self.__obstacles.append(bird)
         else:
-            print("Cactus Spawn")
             cactus = Cactus()
             self.__obstacles.append(cactus)
 

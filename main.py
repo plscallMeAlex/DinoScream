@@ -1,4 +1,5 @@
 from src.DinoScream import DinoScream as DnS
 
-dino = DnS()
-dino.run()
+if __name__ == "__main__":
+    dino = DnS()
+    dino.run()
