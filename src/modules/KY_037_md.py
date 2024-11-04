@@ -16,6 +16,15 @@ CROUCH_EVENT = pygame.USEREVENT + 2
 COOLDOWN = 1
 
 
+def detected_module():
+    try:
+        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+        ser.close()
+        return True
+    except serial.serialutil.SerialException:
+        return False
+
+
 def read_serial():
     with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
         time.sleep(1)  # Wait for the serial connection to establish
@@ -47,8 +56,9 @@ def read_serial():
 # Reading the serial must be done in a separate thread to prevent blocking
 def start_serial_reader():
     # handle to use mock or read real serial
-    if platform.system() == "Windows":
-        print("Using mock serial reader")
-    else:
+    if detected_module():
         serial_thread = threading.Thread(target=read_serial, daemon=True)
         serial_thread.start()
+    else:
+        print("Module not detected, using mock data.")
+        pass

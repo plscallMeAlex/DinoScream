@@ -1,13 +1,13 @@
 import pygame
 import random
-import platform
+
 from src.gamescene.GameState import GameState
 from src.Dino import Dino
 from src.Tile import Tile, SCROLL_SPEED
 from src.obstacles.Cactus import Cactus
 from src.obstacles.bird import Bird
 from src.modules.Mpu_6050_md import get_tilt_angle
-from src.modules.KY_037_md import JUMP_EVENT, CROUCH_EVENT
+from src.modules.KY_037_md import JUMP_EVENT, CROUCH_EVENT, detected_module
 
 
 class Gameplay(GameState):
@@ -118,13 +118,13 @@ class Gameplay(GameState):
 
             # Handle jump and crouch events separate platform controls
             elif event.type == JUMP_EVENT or (
-                platform.system() == "Windows"
+                detected_module() is False
                 and event.type == pygame.KEYDOWN
                 and event.key == pygame.K_UP
             ):
                 self.__dino.jump()
             elif event.type == CROUCH_EVENT or (
-                platform.system() == "Windows"
+                detected_module() is False
                 and event.type == pygame.KEYDOWN
                 and event.key == pygame.K_DOWN
             ):
