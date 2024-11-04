@@ -17,10 +17,6 @@ class Cactus(pygame.sprite.Sprite):
         self.rect.x += self.x_velocity
         self.check_out_of_screen()        
 
-    def kill(self):
-        super().kill()
-        del self
-
     def check_out_of_screen(self):
         if self.rect.right < -20:
             return True

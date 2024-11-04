@@ -21,7 +21,7 @@ class DinoScream(Game):
         self.clock = pygame.time.Clock()
         key_pressed = None
         last_obstacle_time = pygame.time.get_ticks()
-        obstacle_interval = 2000
+        obstacle_interval = 500
 
         while self._running:
             for event in pygame.event.get():
@@ -89,11 +89,11 @@ class DinoScream(Game):
     def random_obstacle(self):
         rand = random.randint(0, 5)
         if rand <= 2:
-            print("cactus spawned")
-            self.__cactus = cactus.Cactus(20)
-            self.__cactus.draw(self._screen)
-            return self.__cactus
-        elif rand == 0:
+        #     print("cactus spawned")
+        #     self.__cactus = cactus.Cactus(20)
+        #     self.__cactus.draw(self._screen)
+        #     return self.__cactus
+        # elif rand == 0:
             print("bird spawned")
             self.__bird = bird.Bird()
             self.__bird.draw(self._screen)
