@@ -6,20 +6,30 @@ class Bird(pygame.sprite.Sprite):
     def __init__(self, speed=-5):
         super().__init__()
 
-        self.rect = pygame.Rect(300, Setting.screen_width, 100, 100)
+        self.rect = pygame.Rect(
+            Setting.screen_width, Setting.screen_height // 2 + 75, 46, 40
+        )
         self.x_velocity = speed
         self.animation_index = 0
-        self.animation_speed = 0.5
+        self.animation_speed = 0.2
         self.frame_counter = 0
-        self.image = pygame.image.load("resources/hackerman.jpg")
+        # self.image = pygame.image.load("resources/hackerman.jpg")
 
-        self.bird_animations = {
-            "fly": Animation((134, 7), 35, 35, 2),
-        }
+        self.bird_animations = Animation((134, 2), 46, 40, 2).getAnimationFrames()
+        self.image = self.bird_animations[self.animation_index]
 
     def update(self):
         self.rect.x += self.x_velocity
-        self.check_out_of_screen()
+        if self.check_out_of_screen():
+            self.kill()
+        self.update_animation()
+
+    def update_animation(self):
+        self.frame_counter += self.animation_speed
+        if self.frame_counter >= 1:
+            self.frame_counter = 0
+            self.animation_index = (self.animation_index + 1) % 2
+            self.image = self.bird_animations[self.animation_index]
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
@@ -32,3 +42,6 @@ class Bird(pygame.sprite.Sprite):
         if self.rect.right < -20:
             return True
         return False
+
+    def check_collision(self, dino_rect):
+        return self.rect.colliderect(dino_rect)

@@ -9,5 +9,11 @@ cloning this repo
 for dev pls make sure you have pygame in venv or local as you want.
 
 ```bash
-    pip install pygame
+    python -m venv venv
+```
+
+Then install package.
+
+```bash
+    pip install requirements.txt
 ```
