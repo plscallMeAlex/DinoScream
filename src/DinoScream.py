@@ -14,7 +14,7 @@ class DinoScream:
     def __init__(self):
         self.__setting = Setting()
         self.__screen = pygame.display.set_mode(*self.__setting.getVideoMode())
-        self.__sceneManager = SceneManager("gameplay")
+        self.__sceneManager = SceneManager("main_menu")
 
     def run(self):
         clock = pygame.time.Clock()

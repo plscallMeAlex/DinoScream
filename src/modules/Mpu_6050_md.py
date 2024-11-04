@@ -8,7 +8,7 @@ sensor = None
 def init_sensor():
     global sensor
     is_windows = platform.system() == "Windows"
-    if not is_windows:
+    if False: # not is_windows: # disable the sensor for now
         from mpu6050 import mpu6050
 
         sensor = mpu6050(0x68)
