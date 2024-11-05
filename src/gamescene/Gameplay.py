@@ -29,8 +29,16 @@ class Gameplay(GameState):
 
         # Font for the "GAME OVER" text
         pygame.font.init()
-        self.font = pygame.font.Font(None, 74)
-        self.score_font = pygame.font.Font(None, 36)
+        self.font = pygame.font.SysFont("mononokinerdfontmono", 74)
+        self.score_font = pygame.font.SysFont("mononokinerdfontmono", 36)
+        self.option_font = pygame.font.SysFont("mononokinerdfontmono", 25)
+
+        # game over options
+        self.__default_option = 0
+        self.count = 0
+        self.restart_text = self.option_font.render("Retry", True, (0, 0, 0))
+        self.quit_text = self.option_font.render("Quit", True, (0, 0, 0))
+        self.__game_over_options = ["RESTART", "QUIT"]
 
         pygame.display.set_caption("DinoScream")
 
@@ -88,6 +96,10 @@ class Gameplay(GameState):
         if self.__score >= 99999:
             self.__game_over = True
 
+        if self.__game_over:
+            screen.blit(self.restart_text, (screen.get_width() // 2 - 150, screen.get_height() // 2 + 100))
+            screen.blit(self.quit_text, (screen.get_width() // 2 + 100, screen.get_height() // 2 + 100))
+
     def render(self, screen):
         screen.fill((255, 255, 255))  # filling the background to white
         self.__dino.draw(screen)
@@ -101,11 +113,13 @@ class Gameplay(GameState):
                 obj.draw(screen)
         else:
             # Display "GAME OVER" in the center of the screen
-            game_over_text = self.font.render("GAME OVER", True, (255, 0, 0))
+            game_over_text = self.font.render("GAME OVER", True, (0, 0, 0))
             text_rect = game_over_text.get_rect(
                 center=(screen.get_width() // 2, screen.get_height() // 2)
             )
             screen.blit(game_over_text, text_rect)
+            screen.blit(self.restart_text, (screen.get_width() // 2 - 150, screen.get_height() // 2 + 100))
+            screen.blit(self.quit_text, (screen.get_width() // 2 + 100, screen.get_height() // 2 + 100))
 
         score_text = self.score_font.render(f"Score: {self.__score}", True, (0, 0, 0))
         screen.blit(score_text, (screen.get_width() - score_text.get_width() - 10, 10))
@@ -133,7 +147,37 @@ class Gameplay(GameState):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     if self.__game_over:
-                        self.reset_game()
+                        if self.__default_option == 0:
+                            self.reset_game()
+                        elif self.__default_option == 1:
+                            self.reset_game()
+                            self._screenManager.change_scene("main_menu")
+
+            if self.__game_over:
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT:
+                        self.count += 1
+                        if self.count % 2 == 0:
+                            self.select_option(0)
+                        else:
+                            self.select_option(1)
+                    if event.key == pygame.K_LEFT:
+                        self.count += 1
+                        if self.count % 2 == 0:
+                            self.select_option(1)
+                        else:
+                            self.select_option(0)
+
+    def select_option(self, option):
+        selected = self.__game_over_options[option]
+        if selected == "RESTART":
+            self.__default_option = 0
+            self.restart_text = self.option_font.render("Retry", True, (255, 0, 0))
+            self.quit_text = self.option_font.render("Quit", True, (0, 0, 0))
+        elif selected == "QUIT":
+            self.__default_option = 1
+            self.restart_text = self.option_font.render("Retry", True, (0, 0, 0))
+            self.quit_text = self.option_font.render("Quit", True, (255, 0, 0))
 
     def random_obstacle(self):
         rand = random.randint(0, 100)
@@ -152,6 +196,8 @@ class Gameplay(GameState):
         self.__obstacles_last_spawn = 0
         self.__game_over = False
         self.__score = 0
+        self.__default_option = 0
+        self.count = 0
 
     def run(self, delta_time, screen, events):
         self.handle_event(events)
