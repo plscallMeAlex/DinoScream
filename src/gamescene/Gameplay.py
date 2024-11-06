@@ -157,13 +157,13 @@ class Gameplay(GameState):
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         self.count += 1
-                        if self.count % 2 == 0:
+                        if abs(self.count) % 2 == 0:
                             self.select_option(0)
                         else:
                             self.select_option(1)
                     if event.key == pygame.K_LEFT:
-                        self.count += 1
-                        if self.count % 2 == 0:
+                        self.count -= 1
+                        if abs(self.count) % 2 == 0:
                             self.select_option(1)
                         else:
                             self.select_option(0)
