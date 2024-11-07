@@ -1,5 +1,6 @@
 import pygame
 from .Animation import Animation
+from src.modules.Mpu_6050_md import get_tiltX_angle
 
 
 JUMP_STRENGTH = 17
@@ -92,18 +93,18 @@ class Dino(pygame.sprite.Sprite):
             self.set_animation("jump")
 
     def handle_crouch(self):
-        if self.is_crouching:
-            pass
-            current_time = pygame.time.get_ticks()
-            # if current_time - self.crouching_time >= 400:
-            #     self.stand_up()
+        if get_tiltX_angle() >= 6.5:
+            self.is_crouching = True
+            self.crouch()
+        else:
+            self.is_crouching = False
+            self.stand_up()
 
     def crouch(self):
         """Triggers the crouching animation."""
         if not self.is_jumping and not self.is_crouching:
             self.set_animation("crouch")
             self.is_crouching = True
-            self.crouching_time = pygame.time.get_ticks()
 
     def stand_up(self):
         """Switches back to the running animation from crouching."""

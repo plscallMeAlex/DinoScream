@@ -10,10 +10,9 @@ BAUD_RATE = 9600
 
 # Custom event types for jump and crouch
 JUMP_EVENT = pygame.USEREVENT + 1
-CROUCH_EVENT = pygame.USEREVENT + 2
 
 # Cooldown
-COOLDOWN = 1
+COOLDOWN = 0.7
 
 
 def detected_module():
@@ -39,7 +38,7 @@ def read_serial():
                     print("Intesity: ", spike_intensity)
                     current_time = time.time()
                     if current_time - last_action_time >= COOLDOWN:
-                        if spike_intensity > 5:
+                        if spike_intensity > 6:
                             # Trigger the jump event
                             pygame.event.post(pygame.event.Event(JUMP_EVENT))
                             last_action_time = current_time

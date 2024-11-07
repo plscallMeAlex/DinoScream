@@ -33,3 +33,18 @@ def get_tilt_angle():
     except Exception as e:
         print("Error reading from sensor: ", e)
         return None
+
+
+def get_tiltX_angle():
+    global sensor
+    if sensor is None:
+        init_sensor()
+
+    # handle the case where the sensor is not connected
+    try:
+        accel_data = sensor.get_accel_data()
+        x = accel_data["x"]  # use only x-axis data for moving the dino object
+        return x
+    except Exception as e:
+        print("Error reading from sensor: ", e)
+        return None

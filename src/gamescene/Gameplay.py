@@ -6,8 +6,8 @@ from src.Dino import Dino
 from src.Tile import Tile, SCROLL_SPEED
 from src.obstacles.Cactus import Cactus
 from src.obstacles.bird import Bird
-from src.modules.Mpu_6050_md import get_tilt_angle
-from src.modules.KY_037_md import JUMP_EVENT, CROUCH_EVENT, detected_module
+from src.modules.Mpu_6050_md import get_tilt_angle, get_tiltX_angle
+from src.modules.KY_037_md import JUMP_EVENT, detected_module
 
 
 class Gameplay(GameState):
@@ -150,8 +150,8 @@ class Gameplay(GameState):
             ):
                 self.__dino.jump()
             # Handle crouch event separate platform controls
-            elif event.type == CROUCH_EVENT or (
-                detected_module() is False
+            elif (
+                get_tiltX_angle() is None
                 and event.type == pygame.KEYDOWN
                 and event.key == pygame.K_DOWN
             ):
