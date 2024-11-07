@@ -97,8 +97,14 @@ class Gameplay(GameState):
             self.__game_over = True
 
         if self.__game_over:
-            screen.blit(self.restart_text, (screen.get_width() // 2 - 150, screen.get_height() // 2 + 100))
-            screen.blit(self.quit_text, (screen.get_width() // 2 + 100, screen.get_height() // 2 + 100))
+            screen.blit(
+                self.restart_text,
+                (screen.get_width() // 2 - 150, screen.get_height() // 2 + 100),
+            )
+            screen.blit(
+                self.quit_text,
+                (screen.get_width() // 2 + 100, screen.get_height() // 2 + 100),
+            )
 
     def render(self, screen):
         screen.fill((255, 255, 255))  # filling the background to white
@@ -118,8 +124,14 @@ class Gameplay(GameState):
                 center=(screen.get_width() // 2, screen.get_height() // 2)
             )
             screen.blit(game_over_text, text_rect)
-            screen.blit(self.restart_text, (screen.get_width() // 2 - 150, screen.get_height() // 2 + 100))
-            screen.blit(self.quit_text, (screen.get_width() // 2 + 100, screen.get_height() // 2 + 100))
+            screen.blit(
+                self.restart_text,
+                (screen.get_width() // 2 - 150, screen.get_height() // 2 + 100),
+            )
+            screen.blit(
+                self.quit_text,
+                (screen.get_width() // 2 + 100, screen.get_height() // 2 + 100),
+            )
 
         score_text = self.score_font.render(f"Score: {self.__score}", True, (0, 0, 0))
         screen.blit(score_text, (screen.get_width() - score_text.get_width() - 10, 10))
@@ -130,19 +142,24 @@ class Gameplay(GameState):
             if event.type == pygame.QUIT:
                 self._running = False
 
-            # Handle jump and crouch events separate platform controls
+            # Handle jump events separate platform controls
             elif event.type == JUMP_EVENT or (
                 detected_module() is False
                 and event.type == pygame.KEYDOWN
                 and event.key == pygame.K_UP
             ):
                 self.__dino.jump()
+            # Handle crouch event separate platform controls
             elif event.type == CROUCH_EVENT or (
                 detected_module() is False
                 and event.type == pygame.KEYDOWN
                 and event.key == pygame.K_DOWN
             ):
                 self.__dino.crouch()
+            # Handle the stand up after crouching
+            elif event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    self.__dino.stand_up()
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:

@@ -17,7 +17,6 @@ class Dino(pygame.sprite.Sprite):
         self.y_velocity = 0  # Vertical velocity
         self.is_jumping = False  # Flag to check if Dino is jumping
         self.is_crouching = False  # Flag to check if Dino is crouching
-        self.crouching_time = 0  # Time spent crouching
         self.animation_index = 0  # Frame index for animation
         self.animation_speed = 0.2  # Controls frame switching speed
         self.frame_counter = 0  # Tracks time between frame changes
@@ -94,9 +93,10 @@ class Dino(pygame.sprite.Sprite):
 
     def handle_crouch(self):
         if self.is_crouching:
+            pass
             current_time = pygame.time.get_ticks()
-            if current_time - self.crouching_time >= 400:
-                self.stand_up()
+            # if current_time - self.crouching_time >= 400:
+            #     self.stand_up()
 
     def crouch(self):
         """Triggers the crouching animation."""

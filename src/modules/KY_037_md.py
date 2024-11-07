@@ -39,13 +39,9 @@ def read_serial():
                     print("Intesity: ", spike_intensity)
                     current_time = time.time()
                     if current_time - last_action_time >= COOLDOWN:
-                        if spike_intensity > 9:
+                        if spike_intensity > 5:
                             # Trigger the jump event
                             pygame.event.post(pygame.event.Event(JUMP_EVENT))
-                            last_action_time = current_time
-                        elif spike_intensity <= 9:
-                            # Trigger the crouch event
-                            pygame.event.post(pygame.event.Event(CROUCH_EVENT))
                             last_action_time = current_time
                 except ValueError:
                     # If parsing fails, ignore the line

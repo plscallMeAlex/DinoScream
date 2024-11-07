@@ -1,5 +1,3 @@
-import platform
-
 # Global the sensor variable
 sensor = None
 
@@ -7,12 +5,12 @@ sensor = None
 # initialize the sensor by platform type
 def init_sensor():
     global sensor
-    is_windows = platform.system() == "Windows"
-    if False: # not is_windows: # disable the sensor for now
+    try:
         from mpu6050 import mpu6050
 
         sensor = mpu6050(0x68)
-    else:
+    except ImportError:
+
         # Mock the sensor for Windows Operating System
         class MockMPU6050:
             def get_accel_data(self):
