@@ -1,5 +1,6 @@
 import sys
 from src.gamescene.GameState import GameState
+from src.modules.Switch_md import check_button_press
 import pygame
 from src.Dino import Dino
 
@@ -45,6 +46,9 @@ class MainMenu(GameState):
 
 
     def handle_event(self, events):
+        if check_button_press():
+            self.new_game()
+        
         for event in events:
             if self.__prompt:
                 if event.type == pygame.KEYDOWN:
