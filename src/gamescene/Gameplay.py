@@ -149,7 +149,7 @@ class Gameplay(GameState):
                 and event.key == pygame.K_UP
             ):
                 self.__dino.jump()
-            # Handle crouch event separate platform controls
+            # Handle crouch event if it doesn't connect to the module
             elif (
                 get_tiltX_angle() is None
                 and event.type == pygame.KEYDOWN

@@ -93,16 +93,17 @@ class Dino(pygame.sprite.Sprite):
             self.set_animation("jump")
 
     def handle_crouch(self):
-        if get_tiltX_angle() >= 6.5:
+        crouch_angle = get_tiltX_angle()
+        if crouch_angle <= -6.5 and not self.is_crouching:
             self.is_crouching = True
             self.crouch()
-        else:
+        elif crouch_angle > -6.5 and self.is_crouching:
             self.is_crouching = False
             self.stand_up()
 
     def crouch(self):
         """Triggers the crouching animation."""
-        if not self.is_jumping and not self.is_crouching:
+        if not self.is_jumping:
             self.set_animation("crouch")
             self.is_crouching = True
 
