@@ -8,6 +8,7 @@ from src.obstacles.Cactus import Cactus
 from src.obstacles.bird import Bird
 from src.modules.Mpu_6050_md import get_tilt_angle, get_tiltX_angle
 from src.modules.KY_037_md import JUMP_EVENT, detected_module
+from src.modules.Switch_md import check_button_press
 
 
 class Gameplay(GameState):
@@ -33,9 +34,11 @@ class Gameplay(GameState):
         self.score_font = pygame.font.SysFont("mononokinerdfontmono", 36)
         self.option_font = pygame.font.SysFont("mononokinerdfontmono", 25)
 
+        # Button click checking
+        self.button_last_pressed = 0
+
         # game over options
         self.__default_option = 0
-        self.count = 0
         self.restart_text = self.option_font.render("Retry", True, (0, 0, 0))
         self.quit_text = self.option_font.render("Quit", True, (0, 0, 0))
         self.__game_over_options = ["RESTART", "QUIT"]
@@ -171,19 +174,42 @@ class Gameplay(GameState):
                             self._screenManager.change_scene("main_menu")
 
             if self.__game_over:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT:
-                        self.count += 1
-                        if abs(self.count) % 2 == 0:
-                            self.select_option(0)
-                        else:
-                            self.select_option(1)
-                    if event.key == pygame.K_LEFT:
-                        self.count -= 1
-                        if abs(self.count) % 2 == 0:
-                            self.select_option(1)
-                        else:
-                            self.select_option(0)
+                current_time = pygame.time.get_ticks()
+                # Check if the button is pressed twice in a short time it will select that option
+                if (
+                    check_button_press()
+                    and current_time - self.button_last_pressed <= 200
+                ):
+                    self.button_last_pressed = current_time
+                    if self.__default_option == 0:
+                        self.reset_game()
+                    elif self.__default_option == 1:
+                        self.reset_game()
+                        self._screenManager.change_scene("main_menu")
+                # Cheek if the button is pressed more than 200ms it will select the another option
+                elif (
+                    check_button_press()
+                    and current_time - self.button_last_pressed > 200
+                ):
+                    self.button_last_pressed = current_time
+                    if self.__default_option == 0:
+                        self.select_option(1)
+                    elif self.__default_option == 1:
+                        self.select_option(0)
+
+                # elif event.type == pygame.KEYDOWN:
+                #     if event.key == pygame.K_RIGHT:
+                #         self.count += 1
+                #         if abs(self.count) % 2 == 0:
+                #             self.select_option(0)
+                #         else:
+                #             self.select_option(1)
+                #     if event.key == pygame.K_LEFT:
+                #         self.count -= 1
+                #         if abs(self.count) % 2 == 0:
+                #             self.select_option(1)
+                #         else:
+                #             self.select_option(0)
 
     def select_option(self, option):
         selected = self.__game_over_options[option]
@@ -214,7 +240,6 @@ class Gameplay(GameState):
         self.__game_over = False
         self.__score = 0
         self.__default_option = 0
-        self.count = 0
 
     def run(self, delta_time, screen, events):
         self.handle_event(events)
