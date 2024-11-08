@@ -1,8 +1,4 @@
 import pygame
-import random
-from .Dino import Dino
-from .Tile import Tile
-from .obstacles import Cactus, bird
 from src.gamescene.SceneManager import SceneManager
 from src.modules.KY_037_md import start_serial_reader
 from src.Configuration import Setting
