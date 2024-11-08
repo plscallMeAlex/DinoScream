@@ -179,22 +179,23 @@ class Gameplay(GameState):
 
             # Button selection logic based on press timing
             if check_button_press():
-                if current_time - self.button_last_pressed <= 200:
+                if current_time - self.button_last_pressed <= 500:
                     # Double press to select the option
                     if self.__default_option == 0:
                         self.reset_game()
                     elif self.__default_option == 1:
                         self.reset_game()
                         self._screenManager.change_scene("main_menu")
-                elif current_time - self.button_last_pressed > 200:
+                    self.button_last_pressed = 0
+                else:
                     # Toggle option with single press
                     self.__default_option = (
                         1 - self.__default_option
                     )  # toggles between 0 and 1
                     self.select_option(self.__default_option)
 
-                # Update last pressed time
-                self.button_last_pressed = current_time
+                    # Update last pressed time
+                    self.button_last_pressed = current_time
 
     def select_option(self, option):
         selected = self.__game_over_options[option]
