@@ -94,6 +94,7 @@ class Dino(pygame.sprite.Sprite):
 
     def handle_crouch(self):
         crouch_angle = get_tiltX_angle()
+        if crouch_angle == None: return
         if crouch_angle <= -6.5 and not self.is_crouching:
             self.is_crouching = True
             self.crouch()
@@ -127,6 +128,8 @@ class Dino(pygame.sprite.Sprite):
 
         # Determine the movement speed based on whether the Dino is jumping
         move_speed = MOVE_SPEED * (JUMP_MOVE_FACTOR if self.is_jumping else 1)
+        if tilt_angle == None:
+            return
 
         if tilt_angle >= 4:  # Threshold for forward tilt
             self.rect.x -= move_speed

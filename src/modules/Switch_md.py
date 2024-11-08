@@ -15,5 +15,4 @@ def check_button_press():
     if GPIO.input(19) == GPIO.LOW:
         GPIO.cleanup()
         return True
-    GPIO.cleanup()
     return False
