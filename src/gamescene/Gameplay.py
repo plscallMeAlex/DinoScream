@@ -186,7 +186,7 @@ class Gameplay(GameState):
                     elif self.__default_option == 1:
                         self.reset_game()
                         self._screenManager.change_scene("main_menu")
-                else:
+                elif current_time - self.button_last_pressed > 200:
                     # Toggle option with single press
                     self.__default_option = (
                         1 - self.__default_option
