@@ -164,52 +164,37 @@ class Gameplay(GameState):
                 if event.key == pygame.K_DOWN:
                     self.__dino.stand_up()
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    if self.__game_over:
-                        if self.__default_option == 0:
-                            self.reset_game()
-                        elif self.__default_option == 1:
-                            self.reset_game()
-                            self._screenManager.change_scene("main_menu")
+            # elif event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_SPACE:
+            #         if self.__game_over:
+            #             if self.__default_option == 0:
+            #                 self.reset_game()
+            #             elif self.__default_option == 1:
+            #                 self.reset_game()
+            #                 self._screenManager.change_scene("main_menu")
 
-            if self.__game_over:
-                current_time = pygame.time.get_ticks()
-                # Check if the button is pressed twice in a short time it will select that option
-                if (
-                    check_button_press()
-                    and current_time - self.button_last_pressed <= 200
-                ):
-                    self.button_last_pressed = current_time
+        # Check if the game is over
+        if self.__game_over:
+            current_time = pygame.time.get_ticks()
+
+            # Button selection logic based on press timing
+            if check_button_press():
+                if current_time - self.button_last_pressed <= 200:
+                    # Double press to select the option
                     if self.__default_option == 0:
                         self.reset_game()
                     elif self.__default_option == 1:
                         self.reset_game()
                         self._screenManager.change_scene("main_menu")
-                # Cheek if the button is pressed more than 200ms it will select the another option
-                elif (
-                    check_button_press()
-                    and current_time - self.button_last_pressed > 200
-                ):
-                    self.button_last_pressed = current_time
-                    if self.__default_option == 0:
-                        self.select_option(1)
-                    elif self.__default_option == 1:
-                        self.select_option(0)
+                else:
+                    # Toggle option with single press
+                    self.__default_option = (
+                        1 - self.__default_option
+                    )  # toggles between 0 and 1
+                    self.select_option(self.__default_option)
 
-                # elif event.type == pygame.KEYDOWN:
-                #     if event.key == pygame.K_RIGHT:
-                #         self.count += 1
-                #         if abs(self.count) % 2 == 0:
-                #             self.select_option(0)
-                #         else:
-                #             self.select_option(1)
-                #     if event.key == pygame.K_LEFT:
-                #         self.count -= 1
-                #         if abs(self.count) % 2 == 0:
-                #             self.select_option(1)
-                #         else:
-                #             self.select_option(0)
+                # Update last pressed time
+                self.button_last_pressed = current_time
 
     def select_option(self, option):
         selected = self.__game_over_options[option]
