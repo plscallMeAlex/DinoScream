@@ -46,3 +46,5 @@ Then install package.
 ```
 
 For using the local just do then above without connecting to the virtual environment
+
+Download Document Here: [DinoScream Doc](resources/DinoScream%20Document.pdf)
