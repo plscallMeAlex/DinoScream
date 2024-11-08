@@ -163,15 +163,15 @@ class Gameplay(GameState):
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_DOWN:
                     self.__dino.stand_up()
-
-            # elif event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_SPACE:
-            #         if self.__game_over:
-            #             if self.__default_option == 0:
-            #                 self.reset_game()
-            #             elif self.__default_option == 1:
-            #                 self.reset_game()
-            #                 self._screenManager.change_scene("main_menu")
+            # Handle if there is no modules switch
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    if self.__game_over:
+                        if self.__default_option == 0:
+                            self.reset_game()
+                        elif self.__default_option == 1:
+                            self.reset_game()
+                            self._screenManager.change_scene("main_menu")
 
         # Check if the game is over
         if self.__game_over:
